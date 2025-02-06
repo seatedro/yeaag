@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>yeaag</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div class="app">
+            <header>
+                <div class="title">
+                    <h1>yeaag</h1>
+                    <img src="yeag.webp" alt="yeaag" width="96" height="96" />
+                </div>
+                <p class="subtitle">yet another ascii art generator</p>
+            </header>
+
+            <main>
+                <div class="card controls-card">
+                    <div class="drag-area" id="dragArea">
+                        <input
+                            type="file"
+                            id="imageInput"
+                            accept="image/*"
+                            hidden
+                        />
+                        <div class="drag-content">
+                            <svg
+                                width="64"
+                                height="64"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                                />
+                                <polyline points="17 8 12 3 7 8" />
+                                <line x1="12" y1="3" x2="12" y2="15" />
+                            </svg>
+                            <p>Drop your image here or click to upload</p>
+                        </div>
+                    </div>
+
+                    <div class="control-groups">
+                        <div class="control-group">
+                            <label>
+                                <span>Block Size</span>
+                                <div class="slider-container">
+                                    <input
+                                        type="range"
+                                        id="blockSize"
+                                        min="1"
+                                        max="12"
+                                        value="8"
+                                    />
+                                    <span class="value" id="blockSizeValue"
+                                        >8</span
+                                    >
+                                </div>
+                            </label>
+
+                            <label>
+                                <span>Brightness</span>
+                                <div class="slider-container">
+                                    <input
+                                        type="range"
+                                        id="brightness"
+                                        min="0.1"
+                                        max="2"
+                                        step="0.1"
+                                        value="1"
+                                    />
+                                    <span class="value" id="brightnessValue"
+                                        >1.0</span
+                                    >
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="control-group toggles">
+                            <label class="toggle">
+                                <input
+                                    type="checkbox"
+                                    id="autoAdjust"
+                                    checked
+                                />
+                                <span class="toggle-label">Auto Adjust</span>
+                            </label>
+
+                            <label class="toggle">
+                                <input type="checkbox" id="color" checked />
+                                <span class="toggle-label">Color</span>
+                            </label>
+
+                            <label class="toggle">
+                                <input type="checkbox" id="invertColor" />
+                                <span class="toggle-label">Invert</span>
+                            </label>
+                        </div>
+
+                        <div class="control-group toggles">
+                            <label class="toggle">
+                                <input type="checkbox" id="detectEdges" />
+                                <span class="toggle-label">Edge Detection</span>
+                            </label>
+
+                            <!-- new sigma controls -->
+                            <div class="sigma-controls" id="sigmaControls">
+                                <label>
+                                    <span>Sigma 1</span>
+                                    <div class="slider-container">
+                                        <input
+                                            type="range"
+                                            id="sigma1"
+                                            min="0.1"
+                                            max="2.0"
+                                            step="0.1"
+                                            value="0.5"
+                                        />
+                                        <span class="value" id="sigma1Value"
+                                            >0.5</span
+                                        >
+                                    </div>
+                                </label>
+                                <label>
+                                    <span>Sigma 2</span>
+                                    <div class="slider-container">
+                                        <input
+                                            type="range"
+                                            id="sigma2"
+                                            min="0.1"
+                                            max="2.0"
+                                            step="0.1"
+                                            value="1.0"
+                                        />
+                                        <span class="value" id="sigma2Value"
+                                            >1.0</span
+                                        >
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label>
+                                <span>ASCII Characters</span>
+                                <input
+                                    type="text"
+                                    id="asciiChars"
+                                    value=" .:-=+*#%@"
+                                    class="text-input"
+                                />
+                            </label>
+                        </div>
+
+                        <div class="control-group">
+                            <label>
+                                <span>Dithering</span>
+                                <select id="ditherAlgo" class="select-input">
+                                    <option value="none">None</option>
+                                    <option value="floyd-steinberg">
+                                        Floyd-Steinberg
+                                    </option>
+                                    <option value="atkinson">Atkinson</option>
+                                    <option value="bayer-2x2">Bayer 2x2</option>
+                                    <option value="bayer-4x4">Bayer 4x4</option>
+                                    <option value="ordered">Ordered</option>
+                                </select>
+                            </label>
+
+                            <label>
+                                <span>Color Palette</span>
+                                <select id="colorPalette" class="select-input">
+                                    <option value="original">
+                                        Original Colors
+                                    </option>
+                                    <option value="b&w">Black & White</option>
+                                    <option value="terminal">Terminal</option>
+                                    <option value="amber">Amber</option>
+                                    <option value="low-contrast">
+                                        Low Contrast
+                                    </option>
+                                    <option value="nord">Nord</option>
+                                    <option value="catppuccin">
+                                        Catppuccin
+                                    </option>
+                                </select>
+                            </label>
+
+                            <div class="color-pickers">
+                                <label>
+                                    <span>Foreground</span>
+                                    <input
+                                        type="color"
+                                        id="fgColor"
+                                        value="#ffffff"
+                                    />
+                                </label>
+                                <label>
+                                    <span>Background</span>
+                                    <input
+                                        type="color"
+                                        id="bgColor"
+                                        value="#000000"
+                                    />
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="control-group buttons">
+                            <button id="copyBtn" class="primary">
+                                Copy Image
+                            </button>
+                            <button id="downloadBtn">Download</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card output-card">
+                    <canvas id="outputCanvas"></canvas>
+                </div>
+            </main>
+
+            <footer>
+                <p>
+                    built in literally 30 minutes by
+                    <a href="https://x.com/seatedro">@seatedro</a>
+                </p>
+            </footer>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>
